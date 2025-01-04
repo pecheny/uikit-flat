@@ -1,0 +1,22 @@
+{
+    "name": "uikit-flat",
+    "license": "MIT",
+    "tags": [
+        "gui",
+        "ui"
+    ],
+    "description": "",
+    "version": "1.0.0",
+    "releasenote": "Initial release. ",
+    "classPath": "src",
+    "contributors": [
+        "pecheny"
+    ],
+    "dependencies": {
+        "domkit": "git:https://github.com/pecheny/domkit#postinit",
+        "slec": "git:https://github.com/pecheny/slec",
+        "alayout": "git:https://github.com/pecheny/alayout",
+        "flgl": "git:https://github.com/pecheny/flgl",
+        "htext": "git:https://github.com/pecheny/htext"
+    }
+}
