@@ -7,4 +7,7 @@
     <haxelib name="htext"/>
     <haxelib name="taxis"/>
     <assets path="Assets" include="*" />
+
+    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dkit.Components.$Dkit")'/>
+
 </project>

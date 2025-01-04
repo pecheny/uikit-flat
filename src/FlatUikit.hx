@@ -1,10 +1,15 @@
 package;
 
-import Axis2D;
-import al.core.Align;
+import a2d.ContainerStyler;
+import al.layouts.PortionLayout;
+import al.layouts.WholefillLayout;
+import al.layouts.data.LayoutData.FixedSize;
+import al.layouts.data.LayoutData.FractionSize;
 import backends.openfl.DrawcallUtils;
+import dkit.Dkit;
 import ec.Entity;
 import fu.FuCtx;
+import fu.PropStorage;
 import fu.gl.GuiDrawcalls;
 import gl.RenderingPipeline;
 import gl.aspects.ExtractionUtils;
@@ -28,6 +33,20 @@ class FlatUikit {
         ctx.fonts.initFont("", fntPath, null);
 
         regDefaultDrawcalls();
+        regStyles(e);
+        regLayouts(e);
+    }
+
+    function regStyles(e:Entity) {
+        var default_text_style = "small-text";
+
+        var pcStyle = ctx.textStyles.newStyle(default_text_style)
+            .withSize(sfr, .07)
+            .withPadding(horizontal, sfr, 0.1)
+            .withAlign(vertical, Center)
+            .build();
+
+        ctx.textStyles.resetToDefaults();
 
         var fitStyle = ctx.textStyles.newStyle("fit")
             .withSize(pfr, .5)
@@ -37,6 +56,17 @@ class FlatUikit {
             .withPadding(vertical, pfr, 0.33)
             .build();
         ctx.textStyles.resetToDefaults();
+
+        var props = new DummyProps<String>();
+        props.set(Dkit.TEXT_STYLE, default_text_style);
+        e.addComponentByType(PropStorage, props);
+    }
+
+    function regLayouts(e) {
+        var distributer = new al.layouts.Padding(new FractionSize(.25), new PortionLayout(Center, new FixedSize(0.1)));
+        var contLayouts = new ContainerStyler();
+        contLayouts.reg("hcards", distributer, WholefillLayout.instance);
+        e.addComponent(contLayouts);
     }
 
     function regDefaultDrawcalls():Void {
