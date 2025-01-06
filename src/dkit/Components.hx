@@ -1,5 +1,6 @@
 package dkit;
 
+import al.core.DataView;
 import a2d.ContainerStyler;
 import a2d.Placeholder2D;
 import a2d.Widget2DContainer;
@@ -61,7 +62,7 @@ class ButtonDkit extends BaseDkit {
 }
 
 @:uiComp("label")
-class LabelDkit extends BaseDkit {
+class LabelDkit extends BaseDkit implements DataView<String>{
     public var color(default, set):Int = 0xffffff;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
@@ -95,4 +96,9 @@ class LabelDkit extends BaseDkit {
         label?.withText(value);
         return value;
     }
+    
+    public function initData(descr:String):Void {
+        set_text(descr);
+    }
+
 }
