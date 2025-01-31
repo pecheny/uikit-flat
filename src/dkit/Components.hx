@@ -41,7 +41,7 @@ class ButtonDkit extends BaseDkit {
         var btn = new ButtonBase(ph, _onClick);
         ProxyWidgetTransform.grantInnerTransformPh(ph);
         fui.quad(ph.getInnerPh(), 0);
-        btn.addHandler(new InteractiveColors(entity.getComponent(ShapesColorAssigner).setColor).viewHandler);
+        btn.addHandler(new InteractiveColors(entity.getComponent(ShapesColorAssigner).setColor, Uikit.INTERACTIVE_COLORS).viewHandler);
         if (style == "")
             style = props.get(Dkit.TEXT_STYLE);
         label = new CMSDFLabel(ph.getInnerPh(), fui.s(style));

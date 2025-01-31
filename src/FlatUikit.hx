@@ -1,5 +1,7 @@
 package;
 
+import macros.AVConstructor;
+import shimp.ClicksInputSystem.ClickTargetViewState;
 import a2d.ContainerStyler;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
@@ -19,6 +21,15 @@ import gl.passes.ImagePass;
 import htext.FontAspectsFactory;
 
 class FlatUikit {
+    public static var INACTIVE_COLORS(default, null):AVector<shimp.ClicksInputSystem.ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
+        0xE6484848, 0xE6484848, 0xE6484848, 0xE6484848,);
+    
+    public static var INTERACTIVE_COLORS(default, null):AVector<ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
+        0xff000000, //    Hovered =>
+        0xffd46e00, //    Pressed =>
+        0xFFd46e00, //    PressedOutside =>
+        0xff000000);
+
     var ctx:FuCtx;
 
     public var drawcallsLayout(default, null):Xml;
