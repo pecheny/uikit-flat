@@ -1,5 +1,8 @@
 package dkit;
 
+import fu.ui.Properties.EnabledProp;
+import fu.ui.ButtonEnabled;
+import fu.Uikit;
 import al.core.DataView;
 import a2d.ContainerStyler;
 import a2d.Placeholder2D;
@@ -38,15 +41,34 @@ class ButtonDkit extends BaseDkit {
 
     override function init() {
         super.init();
-        var btn = new ButtonBase(ph, _onClick);
         ProxyWidgetTransform.grantInnerTransformPh(ph);
         fui.quad(ph.getInnerPh(), 0);
-        btn.addHandler(new InteractiveColors(entity.getComponent(ShapesColorAssigner).setColor, Uikit.INTERACTIVE_COLORS).viewHandler);
         if (style == "")
             style = props.get(Dkit.TEXT_STYLE);
         label = new CMSDFLabel(ph.getInnerPh(), fui.s(style));
         new ButtonScale(ph.entity);
         text = text;
+        if (ph.entity.hasComponent(EnabledProp))
+            initEnabled(ph)
+        else
+            initSimple(ph);
+    }
+
+    function initSimple(ph) {
+        var btn = new ButtonBase(ph, _onClick);
+        btn.addHandler(new InteractiveColors(entity.getComponent(ShapesColorAssigner).setColor, Uikit.INTERACTIVE_COLORS).viewHandler);
+    }
+
+    function initEnabled(ph:Placeholder2D) {
+        var ic = new InteractiveColors(ph.entity.getComponent(ShapesColorAssigner).setColor);
+        var ep = EnabledProp.getOrCreate(ph.entity);
+        ep.onChange.listen(() -> {
+            @:privateAccess ic.colors = ep.value ? Uikit.INTERACTIVE_COLORS : Uikit.INACTIVE_COLORS;
+        });
+        ep.value = ep.value;
+        var btn = new ButtonEnabled(ph, _onClick);
+        btn.entity.addComponent(ic);
+        btn.addHandler(ic.viewHandler);
     }
 
     function _onClick() {
@@ -62,7 +84,8 @@ class ButtonDkit extends BaseDkit {
 }
 
 @:uiComp("label")
-class LabelDkit extends BaseDkit implements DataView<String>{
+class LabelDkit extends BaseDkit // implements DataView<String>
+{
     public var color(default, set):Int = 0xffffff;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
@@ -71,10 +94,10 @@ class LabelDkit extends BaseDkit implements DataView<String>{
     @:once var styles:TextContextStorage;
     @:once var props:PropStorage<Dynamic>;
 
-    public function new(p:Placeholder2D, ?parent) {
-        super(p, parent);
-        initComponent();
-    }
+    // public function new(p:Placeholder2D, ?parent) {
+    //     super(p, parent);
+    //     initComponent();
+    // }
 
     override function init() {
         super.init();
@@ -96,9 +119,8 @@ class LabelDkit extends BaseDkit implements DataView<String>{
         label?.withText(value);
         return value;
     }
-    
-    public function initData(descr:String):Void {
-        set_text(descr);
-    }
 
+    // public function initData(descr:String):Void {
+    //     set_text(descr);
+    // }
 }
