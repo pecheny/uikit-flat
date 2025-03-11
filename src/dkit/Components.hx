@@ -84,6 +84,7 @@ class ButtonDkit extends BaseDkit {
 }
 
 @:uiComp("label")
+@:domkitDecl
 class LabelDkit extends BaseDkit // implements DataView<String>
 {
     public var color(default, set):Int = 0xffffff;
@@ -94,10 +95,10 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     @:once var styles:TextContextStorage;
     @:once var props:PropStorage<Dynamic>;
 
-    // public function new(p:Placeholder2D, ?parent) {
-    //     super(p, parent);
-    //     initComponent();
-    // }
+    public function new(p:Placeholder2D, ?parent) {
+        super(p, parent);
+        // initComponent();
+    }
 
     override function init() {
         super.init();
