@@ -90,6 +90,7 @@ class ButtonDkit extends BaseDkit {
 @:domkitDecl
 class LabelDkit extends BaseDkit // implements DataView<String>
 {
+    public var align(default, set):Null<htext.Align> ;
     public var color(default, set):Int = 0xffffff;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
@@ -110,6 +111,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         label = new CMSDFLabel(ph, fui.s(style));
         color = color;
         text = text;
+        align = align;
     }
 
     function set_color(value:Int):Int {
@@ -127,6 +129,11 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     // public function initData(descr:String):Void {
     //     set_text(descr);
     // }
+
+    function set_align(value){
+        label?.setAlign(value);
+        return align = value;
+    }
 }
 
 // @:postInit(initDkit)
@@ -134,10 +141,11 @@ class Slider extends BaseDkit {
     public var onChange(default, null):Signal<Float->Void>;
     public var onRelease(default, null):Signal<Void->Void>;
     public var value(get, set):Float;
+
     // public var align:Axis2D = horizontal;
     // see [2025-03-09 Sun 21:04] slider / input, next floor settings gui         :jnote:
-
     static var SRC = <slider ></slider>
+
     var input:SliderInput;
 
     // override function initDkit() {
@@ -157,7 +165,7 @@ class Slider extends BaseDkit {
         return value;
     }
 
-	function get_value():Float {
-		return input.value;
-	}
+    function get_value():Float {
+        return input.value;
+    }
 }
