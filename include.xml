@@ -3,6 +3,8 @@
 	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
     <haxelib name="alayout"/>
     <haxelib name="flgl"/>
+    <haxelib name="fucore"/>
+    <haxelib name="fancy"/>
     <haxelib name="slec"/>
     <haxelib name="htext"/>
     <haxelib name="taxis"/>
