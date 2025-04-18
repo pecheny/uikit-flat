@@ -22,7 +22,11 @@ import htext.FontAspectsFactory;
 
 class FlatUikit {
     public static var INACTIVE_COLORS(default, null):AVector<shimp.ClicksInputSystem.ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
-        0xE6484848, 0xE6484848, 0xE6484848, 0xE6484848,);
+        0xBB121212,
+        0xBB121212,
+        0xBB121212,
+        0xBB121212,
+    );
     
     public static var INTERACTIVE_COLORS(default, null):AVector<ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
         0xff000000, //    Hovered =>
