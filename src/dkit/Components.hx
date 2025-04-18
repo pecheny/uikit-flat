@@ -32,6 +32,7 @@ class ButtonDkit extends BaseDkit {
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
     public var onClick:Void->Void;
+    public var enabled:Bool = true;
     public var style(default, default):String = "";
 
     @:once var styles:TextContextStorage;
@@ -51,7 +52,7 @@ class ButtonDkit extends BaseDkit {
         label = new CMSDFLabel(ph.getInnerPh(), fui.s(style));
         new ButtonScale(ph.entity);
         text = text;
-        if (ph.entity.hasComponent(EnabledProp))
+        if (ph.entity.hasComponent(EnabledProp) || enabled == false)
             initEnabled(ph)
         else
             initSimple(ph);
