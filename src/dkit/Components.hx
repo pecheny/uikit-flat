@@ -64,10 +64,18 @@ class ButtonDkit extends BaseDkit {
     }
 
     function initEnabled(ph:Placeholder2D) {
+        function setLabelAlpha(enabled:Bool) {
+            var color:utils.RGBA = @:privateAccess label.color;
+            color.a = enabled ? 0xff : 0x90;
+            label.setColor(color);
+            trace(StringTools.hex(color));
+        };
+
         var ic = new InteractiveColors(ph.entity.getComponent(ShapesColorAssigner).setColor);
         var ep = EnabledProp.getOrCreate(ph.entity);
         ep.onChange.listen(() -> {
             @:privateAccess ic.colors = ep.value ? Uikit.INTERACTIVE_COLORS : Uikit.INACTIVE_COLORS;
+            setLabelAlpha(ep.value);
         });
         ep.value = ep.value;
         var btn = new ButtonEnabled(ph, _onClick);
@@ -91,7 +99,7 @@ class ButtonDkit extends BaseDkit {
 @:domkitDecl
 class LabelDkit extends BaseDkit // implements DataView<String>
 {
-    public var align(default, set):Null<htext.Align> ;
+    public var align(default, set):Null<htext.Align>;
     public var color(default, set):Int = 0xffffff;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
@@ -131,13 +139,14 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     //     set_text(descr);
     // }
 
-    function set_align(value){
+    function set_align(value) {
         label?.setAlign(value);
         return align = value;
     }
 }
 
 // @:postInit(initDkit)
+
 @:uiComp("slider")
 class SliderDkit extends BaseDkit {
     public var onChange(default, null):Signal<Float->Void>;
