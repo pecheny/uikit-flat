@@ -137,7 +137,8 @@ class LabelDkit extends BaseDkit // implements DataView<String>
 }
 
 // @:postInit(initDkit)
-class Slider extends BaseDkit {
+@:uiComp("slider")
+class SliderDkit extends BaseDkit {
     public var onChange(default, null):Signal<Float->Void>;
     public var onRelease(default, null):Signal<Void->Void>;
     public var value(get, set):Float;
