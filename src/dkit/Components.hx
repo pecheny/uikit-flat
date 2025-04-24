@@ -100,7 +100,8 @@ class ButtonDkit extends BaseDkit {
 class LabelDkit extends BaseDkit // implements DataView<String>
 {
     public var align(default, set):Null<htext.Align>;
-    public var color(default, set):Int = 0xffffff;
+    public var color(default, set):Int = 0xffffffff;
+    public var alpha(get, set):Int;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
     public var style(default, default):String = "";
@@ -127,6 +128,18 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         color = value;
         label?.setColor(value);
         return value;
+    }
+
+    function set_alpha(v:Int) {
+        var color:utils.RGBA = this.color;
+        color.a = v;
+        this.color = color;
+        return v;
+    };
+
+    function get_alpha():Int {
+        var color:utils.RGBA = this.color;
+        return color.a;
     }
 
     function set_text(value:String):String {
