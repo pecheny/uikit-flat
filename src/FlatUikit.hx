@@ -61,6 +61,8 @@ class FlatUikit {
             .withAlign(vertical, Center)
             .build();
 
+        ctx.textStyles.newStyle("small-text-center").withAlign(horizontal, Center).build();
+
         ctx.textStyles.resetToDefaults();
 
         var fitStyle = ctx.textStyles.newStyle("fit")
