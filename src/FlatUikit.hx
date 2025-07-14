@@ -74,16 +74,14 @@ class FlatUikit {
             .build();
         ctx.textStyles.resetToDefaults();
 
-        var props = new DummyProps<String>();
+        var props = e.getOrCreate(PropStorage, () -> new CascadeProps<String>(null, "root-props"));
         props.set(Dkit.TEXT_STYLE, default_text_style);
-        e.addComponentByType(PropStorage, props);
     }
 
-    function regLayouts(e) {
+    function regLayouts(e:Entity) {
+        var contLayouts = e.getComponent(ContainerStyler);
         var distributer = new al.layouts.Padding(new FractionSize(.25), new PortionLayout(Center, new FixedSize(0.1)));
-        var contLayouts = new ContainerStyler();
         contLayouts.reg("hcards", distributer, WholefillLayout.instance);
-        e.addComponent(contLayouts);
     }
 
     function regDefaultDrawcalls():Void {
