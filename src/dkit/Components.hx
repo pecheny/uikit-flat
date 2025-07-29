@@ -105,20 +105,30 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
     public var style(default, default):String = "";
+    public var autoSize:Bool=false;
 
     @:once var styles:TextContextStorage;
     @:once var props:PropStorage<Dynamic>;
 
+
     public function new(p:Placeholder2D, ?parent) {
         super(p, parent);
-        // initComponent();
     }
 
     override function init() {
         super.init();
         if (style == "")
             style = props.get(Dkit.TEXT_STYLE);
+        //  commented code - wip on scroll support for label widget
+        // var ph = this.ph;
+        // if (scroll)
+        //     ph = b().b();
         label = new CMSDFLabel(ph, fui.s(style));
+        if(autoSize) {
+            label.enableAutoSize();
+            // entity.addComponentByType(ResizableWidget2D, label);
+        }
+        // initDkit();
         color = color;
         text = text;
         align = align;
@@ -141,6 +151,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         var color:utils.RGBA = this.color;
         return color.a;
     }
+
 
     function set_text(value:String):String {
         text = value;
