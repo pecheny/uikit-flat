@@ -1,8 +1,7 @@
 package;
 
-import macros.AVConstructor;
-import shimp.ClicksInputSystem.ClickTargetViewState;
 import a2d.ContainerStyler;
+import a2d.Placeholder2D;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.layouts.data.LayoutData.FixedSize;
@@ -19,6 +18,8 @@ import gl.passes.CmsdfPass;
 import gl.passes.FlatColorPass;
 import gl.passes.ImagePass;
 import htext.FontAspectsFactory;
+import macros.AVConstructor;
+import shimp.ClicksInputSystem.ClickTargetViewState;
 
 class FlatUikit {
     public static var INACTIVE_COLORS(default, null):AVector<shimp.ClicksInputSystem.ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
@@ -80,6 +81,10 @@ class FlatUikit {
 
     function regLayouts(e:Entity) {
         var contLayouts = e.getComponent(ContainerStyler);
+        if (contLayouts == null) {
+            contLayouts = new ContainerStyler();
+            e.addComponent(contLayouts);
+        }
         var distributer = new al.layouts.Padding(new FractionSize(.25), new PortionLayout(Center, new FixedSize(0.1)));
         contLayouts.reg("hcards", distributer, WholefillLayout.instance);
     }
