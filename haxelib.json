@@ -13,11 +13,5 @@
         "pecheny"
     ],
     "dependencies": {
-        "domkit": "git:https://github.com/pecheny/domkit#postinit",
-        "slec": "git:https://github.com/pecheny/slec",
-        "alayout": "git:https://github.com/pecheny/alayout",
-        "flgl": "git:https://github.com/pecheny/flgl",
-        "htext": "git:https://github.com/pecheny/htext",
-        "fancy": "git:https://github.com/pecheny/fancy"
     }
 }
