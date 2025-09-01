@@ -1,27 +1,29 @@
 package dkit;
 
-import fu.Signal;
-import fu.ui.Slider.FlatSlider;
-import fu.ui.Slider.SliderInput;
-import fu.ui.Properties.EnabledProp;
-import fu.ui.ButtonEnabled;
-import fu.Uikit;
-import al.core.DataView;
 import a2d.ContainerStyler;
 import a2d.Placeholder2D;
 import a2d.Widget2DContainer;
 import a2d.Widget;
 import al.appliers.ContainerRefresher;
+import al.core.DataView;
 import al.core.TWidget.IWidget;
 import al.layouts.AxisLayout;
 import al.layouts.WholefillLayout;
 import dkit.Dkit.BaseDkit;
 import ec.Entity;
 import fu.PropStorage;
+import fu.Signal;
+import fu.Uikit;
 import fu.bootstrap.ButtonScale;
 import fu.graphics.ColouredQuad;
+import fu.input.AutoFocusComponent;
+import fu.input.WidgetFocus;
 import fu.ui.ButtonBase;
+import fu.ui.ButtonEnabled;
 import fu.ui.CMSDFLabel;
+import fu.ui.Properties.EnabledProp;
+import fu.ui.Slider.FlatSlider;
+import fu.ui.Slider.SliderInput;
 import graphics.ShapesColorAssigner;
 import htext.style.TextContextBuilder.TextContextStorage;
 
@@ -33,6 +35,17 @@ class ButtonDkit extends BaseDkit {
     public var text(default, set):String = "";
     public var onClick:Void->Void;
     public var enabled:Bool = true;
+
+    /**
+        Move focus on this button just after it had added to the stage. Forces 'focus' to be enabled.
+    **/
+    public var autoFocus:Bool = false;
+
+    /**
+        Add focus component to be managet by FocusManager.
+    **/
+    public var focus:Bool = false;
+
     public var style(default, default):String = "";
 
     @:once var styles:TextContextStorage;
@@ -56,6 +69,12 @@ class ButtonDkit extends BaseDkit {
             initEnabled(ph)
         else
             initSimple(ph);
+        if (autoFocus) {
+            focus = true;
+            entity.addComponent(new AutoFocusComponent());
+        }
+        if (focus)
+            new WidgetFocus(ph);
     }
 
     function initSimple(ph) {
@@ -68,7 +87,6 @@ class ButtonDkit extends BaseDkit {
             var color:utils.RGBA = @:privateAccess label.color;
             color.a = enabled ? 0xff : 0x90;
             label.setColor(color);
-            trace(StringTools.hex(color));
         };
 
         var ic = new InteractiveColors(ph.entity.getComponent(ShapesColorAssigner).setColor);
@@ -105,11 +123,10 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
     public var style(default, default):String = "";
-    public var autoSize:Bool=false;
+    public var autoSize:Bool = false;
 
     @:once var styles:TextContextStorage;
     @:once var props:PropStorage<Dynamic>;
-
 
     public function new(p:Placeholder2D, ?parent) {
         super(p, parent);
@@ -124,7 +141,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         // if (scroll)
         //     ph = b().b();
         label = new CMSDFLabel(ph, fui.s(style));
-        if(autoSize) {
+        if (autoSize) {
             label.enableAutoSize();
             // entity.addComponentByType(ResizableWidget2D, label);
         }
@@ -151,7 +168,6 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         var color:utils.RGBA = this.color;
         return color.a;
     }
-
 
     function set_text(value:String):String {
         text = value;
