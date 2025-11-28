@@ -1,7 +1,7 @@
 package;
 
 import a2d.ContainerStyler;
-import a2d.Placeholder2D;
+import a2d.Stage;
 import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.layouts.data.LayoutData.FixedSize;
@@ -9,7 +9,8 @@ import al.layouts.data.LayoutData.FractionSize;
 import backends.openfl.DrawcallUtils;
 import dkit.Dkit;
 import ec.Entity;
-import fu.FuCtx;
+import font.FontStorage;
+import font.bmf.BMFont.BMFontFactory;
 import fu.PropStorage;
 import fu.gl.GuiDrawcalls;
 import gl.RenderingPipeline;
@@ -18,35 +19,34 @@ import gl.passes.CmsdfPass;
 import gl.passes.FlatColorPass;
 import gl.passes.ImagePass;
 import htext.FontAspectsFactory;
+import htext.style.TextContextBuilder;
 import macros.AVConstructor;
 import shimp.ClicksInputSystem.ClickTargetViewState;
 
 class FlatUikit {
     public static var INACTIVE_COLORS(default, null):AVector<shimp.ClicksInputSystem.ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
-        0xBB121212,
-        0xBB121212,
-        0xBB121212,
-        0xBB121212,
-    );
-    
+        0xBB121212, 0xBB121212, 0xBB121212, 0xBB121212,);
+
     public static var INTERACTIVE_COLORS(default, null):AVector<ClickTargetViewState, Int> = AVConstructor.create( //    Idle =>
         0xff000000, //    Hovered =>
         0xffd46e00, //    Pressed =>
         0xFFd46e00, //    PressedOutside =>
         0xff000000);
 
-    var ctx:FuCtx;
-
+    public var pipeline:RenderingPipeline;
+    public var fonts(default, null) = new FontStorage(new BMFontFactory());
     public var drawcallsLayout(default, null):Xml;
+    public var textStyles:TextContextBuilder;
 
-    public function new(ctx:FuCtx) {
-        this.ctx = ctx;
+    public function new(stage:Stage, ?pipeline:RenderingPipeline) {
+        this.pipeline = pipeline ?? new RenderingPipeline();
+        textStyles = new TextContextBuilder(fonts, stage);
         drawcallsLayout = Xml.parse(GuiDrawcalls.DRAWCALLS_LAYOUT).firstElement();
     }
 
     public function configure(e:Entity) {
         var fntPath = "Assets/fonts/robo.fnt";
-        ctx.fonts.initFont("", fntPath, null);
+        fonts.initFont("", fntPath, null);
 
         regDefaultDrawcalls();
         regStyles(e);
@@ -56,24 +56,24 @@ class FlatUikit {
     function regStyles(e:Entity) {
         var default_text_style = "small-text";
 
-        var pcStyle = ctx.textStyles.newStyle(default_text_style)
+        var pcStyle = textStyles.newStyle(default_text_style)
             .withSize(sfr, .07)
             .withPadding(horizontal, sfr, 0.1)
             .withAlign(vertical, Center)
             .build();
 
-        ctx.textStyles.newStyle("small-text-center").withAlign(horizontal, Center).build();
+        textStyles.newStyle("small-text-center").withAlign(horizontal, Center).build();
 
-        ctx.textStyles.resetToDefaults();
+        textStyles.resetToDefaults();
 
-        var fitStyle = ctx.textStyles.newStyle("fit")
+        var fitStyle = textStyles.newStyle("fit")
             .withSize(pfr, .5)
             .withAlign(horizontal, Forward)
             .withAlign(vertical, Backward)
             .withPadding(horizontal, pfr, 0.33)
             .withPadding(vertical, pfr, 0.33)
             .build();
-        ctx.textStyles.resetToDefaults();
+        textStyles.resetToDefaults();
 
         var props = e.getOrCreate(PropStorage, () -> new CascadeProps<String>(null, "root-props"));
         props.set(Dkit.TEXT_STYLE, default_text_style);
@@ -90,10 +90,9 @@ class FlatUikit {
     }
 
     function regDefaultDrawcalls():Void {
-        var pipeline:RenderingPipeline = ctx.pipeline;
         pipeline.addPass(GuiDrawcalls.BG_DRAWCALL, new FlatColorPass());
         pipeline.addPass(GuiDrawcalls.TEXT_DRAWCALL, new CmsdfPass());
-        var fontAsp = new FontAspectsFactory(ctx.fonts, pipeline.textureStorage);
+        var fontAsp = new FontAspectsFactory(fonts, pipeline.textureStorage);
         pipeline.addAspectExtractor(GuiDrawcalls.TEXT_DRAWCALL, fontAsp.create, fontAsp.getAlias);
 
         pipeline.addPass(PictureDrawcalls.IMAGE_DRAWCALL, new ImagePass());
@@ -102,6 +101,6 @@ class FlatUikit {
     }
 
     public function createContainer(e) {
-        return DrawcallUtils.createContainer(ctx.pipeline, e, drawcallsLayout);
+        return DrawcallUtils.createContainer(pipeline, e, drawcallsLayout);
     }
 }
