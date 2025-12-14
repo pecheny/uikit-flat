@@ -6,14 +6,21 @@ import al.layouts.PortionLayout;
 import al.layouts.WholefillLayout;
 import al.layouts.data.LayoutData.FixedSize;
 import al.layouts.data.LayoutData.FractionSize;
+import al.openfl.display.DrawcallDataProvider;
+import al.openfl.display.FlashDisplayRoot;
 import backends.openfl.DrawcallUtils;
 import dkit.Dkit;
+import ec.CtxWatcher;
 import ec.Entity;
+import ecbind.RenderableBinder;
 import font.FontStorage;
 import font.bmf.BMFont.BMFontFactory;
 import fu.PropStorage;
 import fu.gl.GuiDrawcalls;
+import gl.GLNode;
+import gl.OflGLNodeAdapter;
 import gl.RenderingPipeline;
+import gl.aspects.AlphaBlendingAspect;
 import gl.aspects.ExtractionUtils;
 import gl.passes.CmsdfPass;
 import gl.passes.FlatColorPass;
@@ -21,6 +28,8 @@ import gl.passes.ImagePass;
 import htext.FontAspectsFactory;
 import htext.style.TextContextBuilder;
 import macros.AVConstructor;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 import shimp.ClicksInputSystem.ClickTargetViewState;
 
 class FlatUikit {
@@ -100,7 +109,51 @@ class FlatUikit {
         pipeline.addAspectExtractor(PictureDrawcalls.IMAGE_DRAWCALL, picAsp.create);
     }
 
-    public function createContainer(e) {
-        return DrawcallUtils.createContainer(pipeline, e, drawcallsLayout);
+    public function createContainer(e, ?layout:Xml) {
+        layout = layout ?? drawcallsLayout;
+        RenderableBinder.getOrCreate(e); // to prevent
+        var node:GLNode = null;
+        var hasFlash = layout.elementsNamed("openfl").hasNext();
+        pipeline.unknownNodeHandler = defaultNodeHandler;
+
+        var adapter:DisplayObject = null;
+        if (hasFlash) {
+            pipeline.unknownNodeHandler = xmlNodeHandler.bind(e);
+            var mixer = new OflGLNodeMixer();
+            adapter = mixer;
+            node = mixer;
+            for (xmln in layout.elements()) {
+                pipeline.processNode(xmln, mixer);
+            }
+            pipeline.renderAspectBuilder.reset();
+            pipeline.unknownNodeHandler = defaultNodeHandler;
+        } else {
+            node = pipeline.createContainer(drawcallsLayout);
+            var _adapter = new OflGLNodeAdapter();
+            adapter = _adapter;
+            _adapter.addNode(node);
+        }
+        DrawcallUtils.bindLayer(e, node);
+        node.addAspect(new AlphaBlendingAspect());
+        DrawcallDataProvider.get(e).addView(adapter);
+        new CtxWatcher(FlashDisplayRoot, e, true);
+        return e;
+    }
+
+    function defaultNodeHandler(node:Xml, ?container:Null<ContainerGLNode>) {
+        throw "wrong " + node.nodeName;
+    }
+
+    function xmlNodeHandler(e:Entity, node:Xml, ?container:Null<ContainerGLNode>) {
+        switch node.nodeName {
+            case "openfl":
+                var container:OflGLNodeMixer = cast container;
+                var canvas = new Sprite();
+                container.addChild(canvas);
+                var froot = new FlashDisplayRoot(canvas);
+                e.addComponent(froot);
+            case _:
+                throw "wrong " + node.nodeName;
+        }
     }
 }
