@@ -8,10 +8,10 @@ class TransformFlatUikit extends FlatUikit {
         super(stage, new gl.TransformRenderingPipeline());
     }
 
-    override public function createContainer(e:Entity) {
+    override public function createContainer(e:Entity, ?xml) {
         var transform = new TransformAspect();
         e.addComponent(transform);
         pipeline.addAspect(transform);
-        return super.createContainer(e);
+        return super.createContainer(e, xml);
     }
 }
