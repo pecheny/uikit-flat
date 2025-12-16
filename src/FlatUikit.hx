@@ -1,5 +1,6 @@
 package;
 
+import al.openfl.display.FlashBinder;
 import a2d.ContainerStyler;
 import a2d.Stage;
 import al.layouts.PortionLayout;
@@ -150,8 +151,10 @@ class FlatUikit {
                 var container:OflGLNodeMixer = cast container;
                 var canvas = new Sprite();
                 container.addChild(canvas);
-                var froot = new FlashDisplayRoot(canvas);
+                var froot = new FlashBinder(canvas);
                 e.addComponent(froot);
+                if (!e.hasComponent(FlashDisplayRoot))
+                    e.addComponentByType(FlashDisplayRoot, froot);
             case _:
                 throw "wrong " + node.nodeName;
         }
