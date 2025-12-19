@@ -59,13 +59,9 @@ class FlatUikit extends fu.UikitBase {
     }
 
     override function regLayouts(e:Entity) {
-        var contLayouts = e.getComponent(ContainerStyler);
-        if (contLayouts == null) {
-            contLayouts = new ContainerStyler();
-            e.addComponent(contLayouts);
-        }
+        super.regLayouts(e);
         var distributer = new al.layouts.Padding(new FractionSize(.25), new PortionLayout(Center, new FixedSize(0.1)));
-        contLayouts.reg("hcards", distributer, WholefillLayout.instance);
+        containers.reg("hcards", distributer, WholefillLayout.instance);
     }
 
     override function regDefaultDrawcalls():Void {
