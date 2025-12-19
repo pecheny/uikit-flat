@@ -80,6 +80,7 @@ class ButtonDkit extends BaseDkit {
     function initSimple(ph) {
         var btn = new ButtonBase(ph, _onClick);
         btn.addHandler(new InteractiveColors(entity.getComponent(ShapesColorAssigner).setColor, Uikit.INTERACTIVE_COLORS).viewHandler);
+        btn.changeViewState(Idle);
     }
 
     function initEnabled(ph:Placeholder2D) {
@@ -99,6 +100,7 @@ class ButtonDkit extends BaseDkit {
         var btn = new ButtonEnabled(ph, _onClick);
         btn.entity.addComponent(ic);
         btn.addHandler(ic.viewHandler);
+        btn.changeViewState(Idle);
     }
 
     function _onClick() {
