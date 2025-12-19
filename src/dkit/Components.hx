@@ -49,7 +49,7 @@ class ButtonDkit extends BaseDkit {
     public var style(default, default):String = "";
 
     @:once var styles:TextContextStorage;
-    @:once var props:PropStorage<Dynamic>;
+    @:once var props:MultiPropStorage;
 
     public function new(p:Placeholder2D, ?parent) {
         super(p, parent);
@@ -61,7 +61,7 @@ class ButtonDkit extends BaseDkit {
         ProxyWidgetTransform.grantInnerTransformPh(ph);
         fui.quad(ph.getInnerPh(), 0);
         if (style == "")
-            style = props.get(Dkit.TEXT_STYLE);
+            style = props.getString(Dkit.TEXT_STYLE);
         label = new CMSDFLabel(ph.getInnerPh(), fui.s(style));
         new ButtonScale(ph.entity);
         text = text;
@@ -118,7 +118,7 @@ class ButtonDkit extends BaseDkit {
 class LabelDkit extends BaseDkit // implements DataView<String>
 {
     public var align(default, set):Null<htext.Align>;
-    public var color(default, set):Int = 0xffffffff;
+    public var color(default, set):Null<Int>;
     public var alpha(get, set):Int;
     public var label:CMSDFLabel;
     public var text(default, set):String = "";
@@ -126,7 +126,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     public var autoSize:Bool = false;
 
     @:once var styles:TextContextStorage;
-    @:once var props:PropStorage<Dynamic>;
+    @:once var props:MultiPropStorage;
 
     public function new(p:Placeholder2D, ?parent) {
         super(p, parent);
@@ -135,7 +135,12 @@ class LabelDkit extends BaseDkit // implements DataView<String>
     override function init() {
         super.init();
         if (style == "")
-            style = props.get(Dkit.TEXT_STYLE);
+            style = props.getString(Dkit.TEXT_STYLE);
+        if (color == null)
+            color = props.getInt(Dkit.TEXT_COLOR);
+        if (color == null)
+            color = 0;
+
         //  commented code - wip on scroll support for label widget
         // var ph = this.ph;
         // if (scroll)
