@@ -28,14 +28,13 @@ class FlatUikit extends fu.UikitBase {
         0xFFd46e00, //    PressedOutside =>
         0xff000000);
 
-    public function new(stage:Stage, ?pipeline:RenderingPipeline) {
-        super(stage, Xml.parse(GuiDrawcalls.DRAWCALLS_LAYOUT).firstElement(), "Assets/fonts/robo.fnt");
+    public function new(stage:Stage, ?pipeline:RenderingPipeline, fontPath="Assets/fonts/robo.fnt") {
+        super(stage, Xml.parse(GuiDrawcalls.DRAWCALLS_LAYOUT).firstElement(), fontPath);
     }
 
     override function regStyles(e:Entity) {
-        var default_text_style = "small-text";
-
-        textStyles.newStyle(default_text_style)
+        super.regStyles(e);
+        textStyles.newStyle("small-text")
             .withSize(sfr, .07)
             .withPadding(horizontal, sfr, 0.1)
             .withAlign(vertical, Center)
@@ -46,7 +45,6 @@ class FlatUikit extends fu.UikitBase {
         var ts = textStyles;
         ts.resetToDefaults();
         ts.newStyle("center").withAlign(horizontal, Center).build();
-        ts.newStyle(TextContextBuilder.DEFAULT_STYLE).withAlign(horizontal, Center).build();
         ts.newStyle("fit")
             .withSize(pfr, .5)
             .withAlign(horizontal, Forward)
