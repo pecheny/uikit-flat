@@ -149,7 +149,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         //     ph = b().b();
         label = new CMSDFLabel(ph, fui.s(style));
         if (autoSize) {
-            label.enableAutoSize();
+            label.setAutoSizeMode(word_wrap);
             // entity.addComponentByType(ResizableWidget2D, label);
         }
         // initDkit();
