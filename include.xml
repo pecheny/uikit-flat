@@ -9,7 +9,8 @@
     <haxelib name="htext"/>
     <haxelib name="taxis"/>
     <assets path="Assets" include="*" />
+    <assets path="Assets/fonts" include="*" rename="fonts" />
 
-    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dkit.Components.$Dkit")'/>
+    <haxeflag name="--macro" value='domkit.Macros.registerComponentsPath("dkit.$Dkit")'/>
 
 </project>
