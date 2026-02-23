@@ -5,7 +5,7 @@ import gl.aspects.TransformAspect;
 
 class TransformFlatUikit extends FlatUikit {
     public function new(stage) {
-        super(stage, new gl.TransformRenderingPipeline());
+        super(stage, null, null, new gl.TransformRenderingPipeline());
     }
 
     override public function createContainer(e:Entity, ?xml) {

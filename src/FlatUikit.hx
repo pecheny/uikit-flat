@@ -28,8 +28,10 @@ class FlatUikit extends fu.UikitBase {
         0xFFd46e00, //    PressedOutside =>
         0xff000000);
 
-    public function new(stage:Stage, ?pipeline:RenderingPipeline, fontPath="Assets/fonts/robo.fnt") {
-        super(stage, Xml.parse(GuiDrawcalls.DRAWCALLS_LAYOUT).firstElement(), fontPath);
+    public function new(stage:Stage, ?drawcallsLayout:Xml, fontPath = "Assets/fonts/robo.fnt", ?pipeline:RenderingPipeline) {
+        if (drawcallsLayout == null)
+            drawcallsLayout = Xml.parse(GuiDrawcalls.DRAWCALLS_LAYOUT).firstElement();
+        super(stage, drawcallsLayout, fontPath, pipeline);
     }
 
     override function regStyles(e:Entity) {
