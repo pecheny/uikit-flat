@@ -50,7 +50,7 @@ class FlatDepthUikit extends fu.UikitBase {
         ColorSet.instance.addAttribute(AttribAliases.NAME_DEPTH, 1, DataType.float32);
         ColorSet.instance.createWriters();
 
-        Lib.current.stage.addEventListener(openfl.events.Event.RESIZE, (e) -> {
+        Lib.current.stage.addEventListener(openfl.events.Event.ENTER_FRAME, (e) -> {
             Lib.current.stage.context3D?.clear(0, 0, 0, 0, 0);
         });
 
