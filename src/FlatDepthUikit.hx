@@ -1,5 +1,6 @@
 package;
 
+import a2d.Placeholder2D;
 import openfl.Lib;
 import a2d.Stage;
 import al.layouts.PortionLayout;
@@ -115,4 +116,26 @@ class FlatDepthUikit extends fu.UikitBase {
         var picAsp = new TextureAspectFactory(pipeline.textureStorage);
         pipeline.addAspectExtractor(PictureDrawcalls.IMAGE_DRAWCALL, picAsp.create);
     }
+    
+    override public function shape(ph:Placeholder2D, descr:Dynamic):Placeholder2D {
+        return switch descr.type {
+            case "quad": quad(ph, descr.color ?? 0);
+            case _:
+                trace('Unknown shape ${descr.type}');
+                ph;
+        }
+    }
+
+    public function quad(ph:a2d.Placeholder2D, color) {
+        var attrs = ColorSet.instance;
+        var shw = new fu.graphics.ShapeWidget(attrs, ph, true);
+        shw.addChild(new graphics.shapes.QuadGraphicElement(attrs));
+        var colors = new graphics.ShapesColorAssigner(attrs, color, shw.getBuffer());
+        var depth = new fu.graphics.DepthAssigner(attrs, shw.getBuffer());
+        ph.entity.addComponent(colors);
+        ph.entity.addComponent(depth);
+        shw.manInit();
+        return shw.ph;
+    }
+
 }

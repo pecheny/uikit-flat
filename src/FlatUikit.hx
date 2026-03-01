@@ -1,5 +1,6 @@
 package;
 
+import a2d.Placeholder2D;
 import a2d.ContainerStyler;
 import a2d.Stage;
 import al.layouts.PortionLayout;
@@ -73,5 +74,24 @@ class FlatUikit extends fu.UikitBase {
         pipeline.addPass(PictureDrawcalls.IMAGE_DRAWCALL, new ImagePass());
         var picAsp = new TextureAspectFactory(pipeline.textureStorage);
         pipeline.addAspectExtractor(PictureDrawcalls.IMAGE_DRAWCALL, picAsp.create);
+    }
+
+    override public function shape(ph:Placeholder2D, descr:Dynamic):Placeholder2D {
+        return switch descr.type {
+            case "quad": quad(ph, descr.color ?? 0);
+            case _:
+                trace('Unknown shape ${descr.type}');
+                ph;
+        }
+    }
+
+    public function quad(ph:a2d.Placeholder2D, color) {
+        var attrs = gl.sets.ColorSet.instance;
+        var shw = new fu.graphics.ShapeWidget(attrs, ph, true);
+        shw.addChild(new graphics.shapes.QuadGraphicElement(attrs));
+        var colors = new graphics.ShapesColorAssigner(attrs, color, shw.getBuffer());
+        ph.entity.addComponent(colors);
+        shw.manInit();
+        return shw.ph;
     }
 }
