@@ -1,5 +1,6 @@
 package;
 
+import al.prop.DepthComponent;
 import a2d.Placeholder2D;
 import openfl.Lib;
 import a2d.Stage;
@@ -56,6 +57,12 @@ class FlatDepthUikit extends fu.UikitBase {
         Lib.current.stage.addEventListener(openfl.events.RenderEvent.RENDER_OPENGL, onRender);
 
         super(stage, Xml.parse(DRAWCALLS_LAYOUT).firstElement(), fontPath);
+    }
+    
+    override function configure(e:Entity) {
+        super.configure(e);
+        var dc = DepthComponent.getOrCreate(e);
+        dc.value = 0;
     }
 
     function onRender(event:openfl.events.RenderEvent) {
