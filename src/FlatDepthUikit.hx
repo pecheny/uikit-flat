@@ -1,5 +1,6 @@
 package;
 
+import fu.depth.Depth;
 import al.prop.DepthComponent;
 import a2d.Placeholder2D;
 import openfl.Lib;
@@ -61,8 +62,7 @@ class FlatDepthUikit extends fu.UikitBase {
     
     override function configure(e:Entity) {
         super.configure(e);
-        var dc = DepthComponent.getOrCreate(e);
-        dc.value = 0;
+        Depth.configureContainer(e);
     }
 
     function onRender(event:openfl.events.RenderEvent) {
