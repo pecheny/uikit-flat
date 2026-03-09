@@ -45,7 +45,7 @@ class FlatDepthUikit extends fu.UikitBase {
         <drawcall type="text" font="" $DEPTH_MASK="false" />
     </container>';
 
-    public function new(stage:Stage, ?pipeline:RenderingPipeline, fontPath = "Assets/fonts/robo.fnt") {
+    public function new(stage:Stage, defaultDcLayout:Xml, ?pipeline:RenderingPipeline, fontPath = "Assets/fonts/robo.fnt") {
         CMSDFSet.instance.addAttribute(AttribAliases.NAME_DEPTH, 1, DataType.float32);
         CMSDFSet.instance.createWriters();
         ColorSet.instance.addAttribute(AttribAliases.NAME_DEPTH, 1, DataType.float32);
@@ -57,9 +57,9 @@ class FlatDepthUikit extends fu.UikitBase {
 
         Lib.current.stage.addEventListener(openfl.events.RenderEvent.RENDER_OPENGL, onRender);
 
-        super(stage, Xml.parse(DRAWCALLS_LAYOUT).firstElement(), fontPath);
+        super(stage, defaultDcLayout ?? Xml.parse(DRAWCALLS_LAYOUT).firstElement(), fontPath, pipeline);
     }
-    
+
     override function configure(e:Entity) {
         super.configure(e);
         Depth.configureContainer(e);
@@ -123,7 +123,7 @@ class FlatDepthUikit extends fu.UikitBase {
         var picAsp = new TextureAspectFactory(pipeline.textureStorage);
         pipeline.addAspectExtractor(PictureDrawcalls.IMAGE_DRAWCALL, picAsp.create);
     }
-    
+
     override public function shape(ph:Placeholder2D, descr:Dynamic):Placeholder2D {
         return switch descr.type {
             case "quad": quad(ph, descr.color ?? 0);
@@ -144,5 +144,4 @@ class FlatDepthUikit extends fu.UikitBase {
         shw.manInit();
         return shw.ph;
     }
-
 }
