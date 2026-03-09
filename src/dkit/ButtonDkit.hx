@@ -1,5 +1,6 @@
 package dkit;
 
+import fu.ui.Label;
 import a2d.Placeholder2D;
 import dkit.Dkit.BaseDkit;
 import fu.PropStorage;
@@ -50,7 +51,7 @@ class ButtonDkit extends BaseDkit {
         fui.quad(ph.getInnerPh(), 0);
         if (style == "")
             style = props.getString(Dkit.TEXT_STYLE);
-        label = new CMSDFLabel(ph.getInnerPh(), fui.s(style));
+        label = new Label(ph.getInnerPh(), fui.s(style));
         new ButtonScale(ph.entity);
         text = text;
         if (ph.entity.hasComponent(EnabledProp) || enabled == false)

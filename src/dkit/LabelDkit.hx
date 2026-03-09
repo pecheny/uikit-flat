@@ -1,5 +1,6 @@
 package dkit;
 
+import fu.ui.Label;
 import a2d.Placeholder2D;
 import dkit.Dkit.BaseDkit;
 import fu.PropStorage;
@@ -40,7 +41,7 @@ class LabelDkit extends BaseDkit // implements DataView<String>
         // var ph = this.ph;
         // if (scroll)
         //     ph = b().b();
-        label = new CMSDFLabel(ph, fui.s(style));
+        label = new Label(ph, fui.s(style));
         if (autoSize) {
             label.setAutoSizeMode(word_wrap);
             // entity.addComponentByType(ResizableWidget2D, label);
