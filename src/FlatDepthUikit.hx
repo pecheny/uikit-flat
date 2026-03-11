@@ -1,5 +1,6 @@
 package;
 
+import utils.RGBA;
 import fu.depth.Depth;
 import al.prop.DepthComponent;
 import a2d.Placeholder2D;
@@ -51,8 +52,9 @@ class FlatDepthUikit extends fu.UikitBase {
         ColorSet.instance.addAttribute(AttribAliases.NAME_DEPTH, 1, DataType.float32);
         ColorSet.instance.createWriters();
 
+        var bg= new RGBA(lime.app.Application.current.window.context.attributes.background);
         Lib.current.stage.addEventListener(openfl.events.Event.ENTER_FRAME, (e) -> {
-            Lib.current.stage.context3D?.clear(0, 0, 0, 0, 0);
+            Lib.current.stage.context3D?.clear(bg.r/256, bg.g/256, bg.b/256, bg.a/256, 0);
         });
 
         Lib.current.stage.addEventListener(openfl.events.RenderEvent.RENDER_OPENGL, onRender);
